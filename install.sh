@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=0.0.1
+version=v0.0.1
 
 bin="dona"
 blue="\e[0;34m"
