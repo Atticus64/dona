@@ -28,11 +28,11 @@ type Response struct {
 	Total_count int          `json:"total_count"`
 }
 
-func searchDotfiles(query string) ([]Repository, error) {
+func searchDotfiles(query string, page int) ([]Repository, error) {
 
 	parsedQuery := strings.Join(strings.Split(query, " "), "+")
 	q := fmt.Sprintf("dotfiles+%s", parsedQuery)
-	uri := fmt.Sprintf("https://api.github.com/search/repositories?q=%s", q)
+	uri := fmt.Sprintf("https://api.github.com/search/repositories?q=%s&page=%d&per_page=10", q, page)
 	w := wow.New(os.Stdout, spin.Get(spin.Moon), " Searching in github")
 	w.Start()
 
@@ -60,17 +60,26 @@ func searchDotfiles(query string) ([]Repository, error) {
 }
 
 var SearchCmd = &cobra.Command{
-	Use:     "search [query string]",
-	Short:   "Search across dotfiles in github",
-	Long:    `Search in github repositories the dotfiles repos with match query`,
-	Example: `dona search "arch linux aesthetic"`,
+	Use:   "search [query string]",
+	Short: "Search across dotfiles in github",
+	Long:  `Search in github repositories the dotfiles repos with match query`,
+	Example: `
+	dona search "arch linux aesthetic"
+	dona search fedora --page 4
+	dona search cat -p 2
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		page, err := cmd.Flags().GetInt("page")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		if len(args) <= 0 {
 			cmd.Help()
 			return
 		}
 
-		result, error := searchDotfiles(args[0])
+		result, error := searchDotfiles(args[0], page)
 
 		if error != nil {
 			fmt.Println(error)
@@ -81,7 +90,6 @@ var SearchCmd = &cobra.Command{
 			fmt.Println(color.RedString("Name:"), repo.FullName)
 			fmt.Println(color.BlueString("Url:"), repo.Html_url)
 			fmt.Println(color.YellowString("Description:"), repo.Description)
-			fmt.Println(color.GreenString("-----------------------------------------"))
 			fmt.Println()
 		}
 	},

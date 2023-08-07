@@ -28,10 +28,12 @@ var rootCmd = &cobra.Command{
 }
 
 var ShowVersion bool
+var page int
 
 func main() {
 	rootCmd.PersistentFlags().BoolVarP(&ShowVersion, "version", "v", false, "Show Dona version")
 
+	cmd.SearchCmd.PersistentFlags().IntVarP(&page, "page", "p", 1, "Number of page")
 	rootCmd.AddCommand(cmd.VersionCmd)
 	rootCmd.AddCommand(cmd.SearchCmd)
 
