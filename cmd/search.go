@@ -33,7 +33,6 @@ func searchDotfiles(query string) ([]Repository, error) {
 	parsedQuery := strings.Join(strings.Split(query, " "), "+")
 	q := fmt.Sprintf("dotfiles+%s", parsedQuery)
 	uri := fmt.Sprintf("https://api.github.com/search/repositories?q=%s", q)
-	fmt.Println(uri)
 	w := wow.New(os.Stdout, spin.Get(spin.Moon), " Searching in github")
 	w.Start()
 
