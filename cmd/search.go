@@ -63,6 +63,10 @@ var SearchCmd = &cobra.Command{
 	Use:   "search [query string]",
 	Short: "Search across dotfiles in github",
 	Long:  `Search in github repositories the dotfiles repos with match query`,
+	Args: cobra.MinimumNArgs(1),
+	SuggestFor: []string{
+		"find",
+	},
 	Example: `
 	dona search "arch linux aesthetic"
 	dona search fedora --page 4
@@ -72,10 +76,6 @@ var SearchCmd = &cobra.Command{
 		page, err := cmd.Flags().GetInt("page")
 		if err != nil {
 			fmt.Println(err)
-			return
-		}
-		if len(args) <= 0 {
-			cmd.Help()
 			return
 		}
 
