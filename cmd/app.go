@@ -6,6 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func GetVersion() string {
+	return "0.0.3"
+}
+
 func GetHome () (string, error) {
 	dirname, err := os.UserHomeDir()
 	if err != nil {
@@ -40,7 +44,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ShowVersion {
-			fmt.Println("Dona version 0.0.1 beta ultra alpha radioactive")
+			fmt.Println("Dona version " + GetVersion())
 			return
 		}
 

@@ -56,3 +56,5 @@ else
     ;;
   esac
 fi
+
+printf "Get started with dona init"
