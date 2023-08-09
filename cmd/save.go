@@ -37,6 +37,10 @@ var SaveCmd = &cobra.Command{
 	Use:   "save [Git Repo URL/Name]",
 	Short: "Save third party dotfiles in dots directory",
 	Args:  cobra.MinimumNArgs(1),
+	Example: `
+	dona save user/dotfiles # uri postfix
+	dona save https://github.com/user/dots  
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		param := args[0]
 		w := wow.New(os.Stdout, spin.Get(spin.Earth), " Searching in github")

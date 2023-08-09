@@ -117,6 +117,11 @@ var PinCmd = &cobra.Command{
 	Use:   "pin add/del [Name/url ofo a dotfile]",
 	Short: "Manage your pins (add or delete)",
 	Args:  cobra.MinimumNArgs(2),
+	Example: `
+	dona pin add user/dotfiles -t fedora
+	dona pin del user/dotfiles
+	dona pin del fedora # delete all pins with tag fedora
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		
 		tag, error := cmd.Flags().GetString("tag")

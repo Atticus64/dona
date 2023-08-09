@@ -34,6 +34,7 @@ var CloneCmd = &cobra.Command{
 	Use:   "clone [Git Repo URL]",
 	Short: "Clone dotfiles from Repository",
 	Args:  cobra.MinimumNArgs(1),
+	Example: "dona clone https://github.com/user/dotfiles",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := cloneRepo(args[0]); err != nil {
 			fmt.Println("Failed to clone")

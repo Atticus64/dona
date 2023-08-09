@@ -70,6 +70,10 @@ var ListCmd = &cobra.Command{
 	Use:   "list dots/pins",
 	Short: "List dotfiles you saved or pins",
 	Args:  cobra.MinimumNArgs(1),
+	Example: `
+	dona list dots 
+	dona list pins
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := args[0]
 
