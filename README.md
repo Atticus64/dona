@@ -5,7 +5,7 @@ CLI to manage your dotfiles
 
 ## Features 🎉
 
-* 🔍 Search dotfiles with a command and with pagination 🔍
+* 🔍 Search dotfiles with a command and with pagination 
 * 🏆 Track your dotfiles with CLI api connected to Git `dona git` 
 * ✨ Save third party dotfiles in a specific folder 
 * 🔐 Manage pins (key/value items to save repositories or resources) 
