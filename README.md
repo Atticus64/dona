@@ -3,6 +3,8 @@
 
 CLI to manage your dotfiles 
 
+![](./assets/demo.gif)
+
 ## Features 🎉
 
 * 🔍 Search dotfiles with a command and with pagination 
