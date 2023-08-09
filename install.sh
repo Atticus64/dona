@@ -17,6 +17,8 @@ if [ ! -d "$install_dir" ]; then
         mkdir -p "$install_dir"
 fi
 
+curl https://raw.githubusercontent.com/Atticus64/dona/master/assets/donut.txt
+
 printf "\n\nFetching binary dona\n"
 
 curl --fail --progress-bar --location --output dona https://github.com/Atticus64/dona/releases/download/$version/$target
