@@ -1,8 +1,7 @@
 #!/bin/bash
 
-version=v0.0.2
-
 bin="dona"
+version=v0.0.2
 blue="\e[0;34m"
 green="\e[0;32m"
 install_dir="$HOME/.dona/bin"
@@ -20,8 +19,7 @@ fi
 
 printf "\n\nFetching binary dona\n"
 
-
-curl --fail --progress-bar --location --output dona https://github.com/Atticus64/dona/releases/download/v$version/$target
+curl --fail --progress-bar --location --output dona https://github.com/Atticus64/dona/releases/download/$version/$target
 
 chmod +x $bin
 
