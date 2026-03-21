@@ -1,8 +1,10 @@
-package cmd
+package actions
 
 import (
-	"os/exec"
 	"fmt"
+	"os/exec"
+
+	"github.com/atticus64/dona/cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -14,21 +16,20 @@ var GitCmd = &cobra.Command{
 	dona git revert HEAD
 	dona git remote add origin https://github.com/user/dots
 	`,
-	Args:  cobra.MinimumNArgs(1),
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.DisableFlagParsing = true
 		runGit(args)
 	},
 }
 
-func GetDotfilesPath()	(string, error) {
-	dirname, err := GetHome()
+func GetDotfilesPath() (string, error) {
+	dirname, err := util.GetHome()
 	if err != nil {
 		return "", err
 	}
 	return dirname + "/.dona/dotfiles", nil
 }
-
 
 func runGit(args []string) {
 
@@ -40,7 +41,7 @@ func runGit(args []string) {
 
 	args = append(commandArgs, args...)
 
-    out, err := exec.Command("git", args...).Output()	
+	out, err := exec.Command("git", args...).Output()
 
 	if err != nil {
 		fmt.Println("Git command failed")

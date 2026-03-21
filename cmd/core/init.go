@@ -1,37 +1,36 @@
-package cmd
+package core
 
 import (
 	"encoding/json"
-	"github.com/spf13/cobra"
-	"os"
 	"fmt"
+	"os"
+
+	"github.com/atticus64/dona/cmd/models"
+	"github.com/atticus64/dona/cmd/util"
+	"github.com/spf13/cobra"
 )
 
-type Pin struct {
-	Name string
-	Tag string
-}
-func CreateDotsFolders () error {
-	dirname, err := GetHome()
+func CreateDotsFolders() error {
+	dirname, err := util.GetHome()
 	if err != nil {
 		return err
 	}
 
 	path := dirname + "/.dona"
-	checkDir(path)
-	checkDir(path + "/dots") 
-    checkDir(path + "/dotfiles") 
+	util.CheckDir(path)
+	util.CheckDir(path + "/dots")
+	util.CheckDir(path + "/dotfiles")
 
-	data := []Pin{}
+	data := []models.Pin{}
 
 	files, err := os.ReadDir(path)
 
 	file, _ := json.MarshalIndent(data, "", " ")
-	os.WriteFile(path + "/pins.json", file, 0644)
+	os.WriteFile(path+"/pins.json", file, 0644)
 
 	if err != nil {
-        return err
-    }
+		return err
+	}
 
 	if len(files) <= 2 {
 		return fmt.Errorf("No files found in %s", path)
@@ -39,7 +38,6 @@ func CreateDotsFolders () error {
 
 	return nil
 }
-
 
 var InitCmd = &cobra.Command{
 	Use:   "init",
@@ -49,5 +47,3 @@ var InitCmd = &cobra.Command{
 		fmt.Println("Dotfiles initialized")
 	},
 }
-
-

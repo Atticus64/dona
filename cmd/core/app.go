@@ -1,33 +1,15 @@
-package cmd
+package core
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/atticus64/dona/cmd/actions"
+	"github.com/atticus64/dona/cmd/util"
 	"github.com/spf13/cobra"
 )
 
-func GetHome () (string, error) {
-	dirname, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-
-	return dirname, nil
-}
-
-func checkDir (dirname string) error {
-	if _, err := os.Stat(dirname); err != nil {
-		if err := os.Mkdir(dirname, 0755); err != nil {
-			panic(err)
-		}
-	} 
-	
-	return nil
-}
-
 var ShowVersion bool
 var page int
-var tag string
 
 var rootCmd = &cobra.Command{
 	Use:   "dona",
@@ -44,7 +26,8 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("Dona cli to manage your dotfiles")
+		fmt.Println("Dona -> Dotfiles natural manager")
+		cmd.Help()
 	},
 }
 
@@ -61,14 +44,12 @@ func configure() *cobra.Command {
 
 	rootCmd.PersistentFlags().BoolVarP(&ShowVersion, "version", "v", false, "Show Dona version")
 
-	SearchCmd.PersistentFlags().IntVarP(&page, "page", "p", 1, "Number of page")
-	PinCmd.PersistentFlags().StringVarP(&tag, "tag", "t", "", "Tag to save pin")
-	GitCmd.DisableFlagParsing = true
-	rootCmd.AddCommand(VersionCmd, SearchCmd, GitCmd, DelCmd)
-	rootCmd.AddCommand(InitCmd, CloneCmd, SaveCmd, ListCmd)
-	rootCmd.AddCommand(PinCmd)
+	actions.SearchCmd.PersistentFlags().IntVarP(&page, "page", "p", 1, "Number of page")
+	actions.PinCmd.PersistentFlags().StringVarP(&actions.Tag, "tag", "t", "", "Tag to save pin")
+	actions.GitCmd.DisableFlagParsing = true
+	rootCmd.AddCommand(util.VersionCmd, actions.SearchCmd, actions.GitCmd, actions.DelCmd)
+	rootCmd.AddCommand(InitCmd, actions.CloneCmd, actions.SaveCmd, actions.ListCmd)
+	rootCmd.AddCommand(actions.PinCmd)
 
 	return rootCmd
 }
-
-

@@ -1,24 +1,27 @@
-package cmd
+package actions
 
 import (
 	"fmt"
 	"os"
 
 	"encoding/json"
+
+	"github.com/atticus64/dona/cmd/models"
+	"github.com/atticus64/dona/cmd/util"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
 // Returns a new slice of Pins containing all strings in the
 // slice that satisfy the predicate `f`.
-func FilterPins(vs []Pin, f func(Pin) bool) []Pin {
-    vsf := make([]Pin, 0)
-    for _, v := range vs {
-        if f(v) {
-            vsf = append(vsf, v)
-        }
-    }
-    return vsf
+func FilterPins(vs []models.Pin, f func(models.Pin) bool) []models.Pin {
+	vsf := make([]models.Pin, 0)
+	for _, v := range vs {
+		if f(v) {
+			vsf = append(vsf, v)
+		}
+	}
+	return vsf
 }
 
 func printDots(home string) {
@@ -40,7 +43,7 @@ func printDots(home string) {
 	items := len(files)
 	for i, entry := range files {
 		fmt.Println(color.CyanString("│"))
-		if i == items - 1 {
+		if i == items-1 {
 			fmt.Println(color.CyanString("└── ") + entry.Name())
 		} else {
 			fmt.Println(color.CyanString("├── ") + entry.Name())
@@ -50,20 +53,20 @@ func printDots(home string) {
 }
 
 func removeDuplicateValues(slice []string) []string {
-    keys := make(map[string]bool)
-    list := []string{}
- 
-    // If the key(values of the slice) is not equal
-    // to the already present value in new slice (list)
-    // then we append it. else we jump on another element.
-    for _, entry := range slice {
-        if _, value := keys[entry]; !value {
-            keys[entry] = true
-            list = append(list, entry)
-        }
-    }
+	keys := make(map[string]bool)
+	list := []string{}
 
-    return list
+	// If the key(values of the slice) is not equal
+	// to the already present value in new slice (list)
+	// then we append it. else we jump on another element.
+	for _, entry := range slice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+
+	return list
 }
 
 var ListCmd = &cobra.Command{
@@ -77,7 +80,7 @@ var ListCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		arg := args[0]
 
-		home, fsErr := GetHome()
+		home, fsErr := util.GetHome()
 
 		if fsErr != nil {
 			fmt.Println(fsErr)
@@ -87,8 +90,8 @@ var ListCmd = &cobra.Command{
 		if arg == "dots" {
 			printDots(home)
 		} else if arg == "pins" {
-			file, err  := os.ReadFile(home + "/.dona/pins.json")
-			pins := []Pin{}
+			file, err := os.ReadFile(home + "/.dona/pins.json")
+			pins := []models.Pin{}
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -109,7 +112,7 @@ var ListCmd = &cobra.Command{
 			fmt.Println(color.YellowString("Pins"))
 			fmt.Println(color.CyanString("│"))
 			for _, tag := range tags {
-				pins := FilterPins(pins, func(pin Pin) bool {
+				pins := FilterPins(pins, func(pin models.Pin) bool {
 					return pin.Tag == tag
 				})
 
@@ -120,9 +123,7 @@ var ListCmd = &cobra.Command{
 
 			}
 
-
 		}
 
 	},
 }
-

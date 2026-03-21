@@ -1,24 +1,26 @@
-package cmd
+package actions
 
 import (
-	"github.com/spf13/cobra"
 	"fmt"
-	"os/exec"
 	"os"
+	"os/exec"
+
+	"github.com/atticus64/dona/cmd/util"
+	"github.com/spf13/cobra"
 )
 
 func cloneRepo(url string) error {
 
-	home, fsErr := GetHome()
+	home, fsErr := util.GetHome()
 	if fsErr != nil {
 		return fsErr
 	}
-	if e := exec.Command("rm", "-rf", home + "/.dona/dotfiles").Run(); e != nil {
+	if e := exec.Command("rm", "-rf", home+"/.dona/dotfiles").Run(); e != nil {
 		fmt.Println(e)
 		return e
 	}
 
-	out, err := exec.Command("git", "clone", url, home + "/.dona/dotfiles").Output()
+	out, err := exec.Command("git", "clone", url, home+"/.dona/dotfiles").Output()
 
 	if err != nil {
 		return err
@@ -31,9 +33,9 @@ func cloneRepo(url string) error {
 }
 
 var CloneCmd = &cobra.Command{
-	Use:   "clone [Git Repo URL]",
-	Short: "Clone dotfiles from Repository",
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "clone [Git Repo URL]",
+	Short:   "Clone dotfiles from Repository",
+	Args:    cobra.MinimumNArgs(1),
 	Example: "dona clone https://github.com/user/dotfiles",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := cloneRepo(args[0]); err != nil {
@@ -43,5 +45,3 @@ var CloneCmd = &cobra.Command{
 		fmt.Println("Dotfiles cloned successfully")
 	},
 }
-
-

@@ -1,4 +1,4 @@
-package cmd
+package actions
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/atticus64/dona/cmd/models"
 	"github.com/fatih/color"
 	"github.com/gernest/wow"
 	"github.com/gernest/wow/spin"
@@ -15,20 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Repository struct {
-	Name             string `json:"name"`
-	FullName         string `json:"full_name"`
-	Html_url         string `json:"html_url"`
-	Description      string `json:"description"`
-	Stargazers_count int    `json:"stargazers_count"`
-}
-
-type Response struct {
-	Items       []Repository `json:"items"`
-	Total_count int          `json:"total_count"`
-}
-
-func searchDotfiles(query string, page int) ([]Repository, error) {
+func searchDotfiles(query string, page int) ([]models.Repository, error) {
 
 	parsedQuery := strings.Join(strings.Split(query, " "), "+")
 	q := fmt.Sprintf("dotfiles+%s", parsedQuery)
@@ -45,7 +33,7 @@ func searchDotfiles(query string, page int) ([]Repository, error) {
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 
-	var result Response
+	var result models.Response
 	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, err
 	}
@@ -63,7 +51,7 @@ var SearchCmd = &cobra.Command{
 	Use:   "search [query string]",
 	Short: "Search across dotfiles in github",
 	Long:  `Search in github repositories the dotfiles repos with match query`,
-	Args: cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(1),
 	SuggestFor: []string{
 		"find",
 	},
@@ -89,7 +77,8 @@ var SearchCmd = &cobra.Command{
 		for _, repo := range result {
 			fmt.Println(color.RedString("Name:"), repo.FullName)
 			fmt.Println(color.BlueString("Url:"), repo.Html_url)
-			fmt.Println(color.YellowString("Description:"), repo.Description)
+			fmt.Println(color.GreenString("Description:"), repo.Description)
+			fmt.Println(color.YellowString("Stars:"), repo.Stargazers_count)
 			fmt.Println()
 		}
 	},

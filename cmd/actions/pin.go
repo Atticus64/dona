@@ -1,16 +1,20 @@
-package cmd
+package actions
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 
+	"github.com/atticus64/dona/cmd/models"
+	"github.com/atticus64/dona/cmd/util"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
+var Tag string
+
 func addPin(home string, args []string) error {
-	path := home + "/.dona/pins.json" 
+	path := home + "/.dona/pins.json"
 
 	// check if exist pins.json
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -19,10 +23,13 @@ func addPin(home string, args []string) error {
 		return err
 	}
 
-	newPin := Pin{args[1], tag}
+	newPin := models.Pin{
+		Name: args[1],
+		Tag:  Tag,
+	}
 
-	file, err  := os.ReadFile(home + "/.dona/pins.json")
-	pins := []Pin{}
+	file, err := os.ReadFile(home + "/.dona/pins.json")
+	pins := []models.Pin{}
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -52,7 +59,7 @@ func addPin(home string, args []string) error {
 	return nil
 }
 
-func byName(pins []Pin, key string) bool {
+func byName(pins []models.Pin, key string) bool {
 	for _, pin := range pins {
 		if pin.Name == key {
 			return true
@@ -74,26 +81,26 @@ func delPin(home string, args []string) error {
 
 	key := args[1]
 
-	file, err  := os.ReadFile(home + "/.dona/pins.json")
+	file, err := os.ReadFile(home + "/.dona/pins.json")
 
 	if err != nil {
 		return err
 	}
 
-	pins := []Pin{}
+	pins := []models.Pin{}
 
 	if e := json.Unmarshal([]byte(file), &pins); e != nil {
 		return err
 	}
 
-	newPins := []Pin{}
+	newPins := []models.Pin{}
 	if byName(pins, key) {
-		newPins = FilterPins(pins, func(pin Pin) bool {
+		newPins = FilterPins(pins, func(pin models.Pin) bool {
 			return pin.Name != key
 		})
-		
+
 	} else {
-		newPins = FilterPins(pins, func(pin Pin) bool {
+		newPins = FilterPins(pins, func(pin models.Pin) bool {
 			return pin.Tag != key
 		})
 	}
@@ -123,7 +130,7 @@ var PinCmd = &cobra.Command{
 	dona pin del fedora # delete all pins with tag fedora
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		
+
 		tag, error := cmd.Flags().GetString("tag")
 		if error != nil || tag == "" && args[0] == "add" {
 			fmt.Println(color.RedString("Error: ") + "Value for a tag is required")
@@ -137,7 +144,7 @@ var PinCmd = &cobra.Command{
 			return
 		}
 
-		home, error := GetHome()
+		home, error := util.GetHome()
 
 		if error != nil {
 			fmt.Println(error)

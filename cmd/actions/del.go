@@ -1,10 +1,13 @@
-package cmd
+package actions
 
 import (
 	"fmt"
-	"os/exec"
 	"os"
+	"os/exec"
 	"strings"
+
+	//"github.com/atticus64/dona/cmd/core"
+	"github.com/atticus64/dona/cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +22,7 @@ var DelCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		param := args[0]
 
-		home, fsErr := GetHome()
+		home, fsErr := util.GetHome()
 
 		if fsErr != nil {
 			fmt.Println(fsErr)
@@ -43,6 +46,3 @@ var DelCmd = &cobra.Command{
 
 	},
 }
-
-
-

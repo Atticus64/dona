@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
-	"github.com/atticus64/dona/cmd"
+
+	"github.com/atticus64/dona/cmd/core"
 )
 
 func main() {
 
-	if err := cmd.CreateDona(); err != nil {
+	if err := core.CreateDona(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
