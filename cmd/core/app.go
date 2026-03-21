@@ -49,7 +49,7 @@ func configure() *cobra.Command {
 	actions.GitCmd.DisableFlagParsing = true
 	rootCmd.AddCommand(util.VersionCmd, actions.SearchCmd, actions.GitCmd, actions.DelCmd)
 	rootCmd.AddCommand(InitCmd, actions.CloneCmd, actions.SaveCmd, actions.ListCmd)
-	rootCmd.AddCommand(actions.PinCmd)
+	rootCmd.AddCommand(actions.PinCmd, actions.DonutCmd)
 
 	return rootCmd
 }
