@@ -1,7 +1,7 @@
 #!/bin/bash
 
 bin="dona"
-version=v0.0.2
+version=v0.0.3
 blue="\e[0;34m"
 green="\e[0;32m"
 install_dir="$HOME/.dona/bin"
@@ -9,7 +9,7 @@ install_dir="$HOME/.dona/bin"
 case $(uname -sm) in
 	"Darwin x86_64") target="x86_64_dona_macos"
 		install_dir="/usr/local/bin" ;;
-	"Darwin arm64") target="aarch64_dona_macos" ;;
+	"Darwin arm64") target="x86_64_dona_macos" ;;
 	*) target="x86_64_linux_dona" ;;
 esac
 
@@ -56,3 +56,5 @@ else
     ;;
   esac
 fi
+
+printf "Get started with dona init"

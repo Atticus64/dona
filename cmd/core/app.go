@@ -22,7 +22,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if ShowVersion {
-			fmt.Println("Dona version 0.0.1 beta ultra alpha radioactive")
+			fmt.Println("Dona version " + util.GetVersion())
 			return
 		}
 
