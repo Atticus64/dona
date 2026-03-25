@@ -1,6 +1,6 @@
 module github.com/atticus64/dona
 
-go 1.24.0
+go 1.24
 
 require (
 	github.com/fatih/color v1.15.0
