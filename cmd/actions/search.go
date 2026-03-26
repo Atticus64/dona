@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
+	"sort"
 	"strings"
 
 	"github.com/atticus64/dona/cmd/models"
@@ -16,7 +18,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func searchDotfiles(query string, page int) ([]models.Repository, error) {
+func SearchDotfiles(query string, page int) ([]models.Repository, error) {
 
 	parsedQuery := strings.Join(strings.Split(query, " "), "+")
 	q := fmt.Sprintf("dotfiles+%s", parsedQuery)
@@ -47,13 +49,25 @@ func searchDotfiles(query string, page int) ([]models.Repository, error) {
 	return result.Items, nil
 }
 
+func SortViaStars(repositories []models.Repository) {
+	sort.Slice(repositories, func(i, j int) bool {
+		return repositories[i].Stargazers_count > repositories[j].Stargazers_count
+	})
+}
+
+func SortViaName(repositories []models.Repository) {
+	sort.Slice(repositories, func(i, j int) bool {
+		return repositories[i].FullName < repositories[j].FullName
+	})
+}
+
 var SearchCmd = &cobra.Command{
 	Use:   "search [query string]",
 	Short: "Search across dotfiles in github",
 	Long:  `Search in github repositories the dotfiles repos with match query`,
 	Args:  cobra.MinimumNArgs(1),
 	SuggestFor: []string{
-		"find",
+		"find", "lookup",
 	},
 	Example: `
 	dona search "arch linux aesthetic"
@@ -66,15 +80,39 @@ var SearchCmd = &cobra.Command{
 			fmt.Println(err)
 			return
 		}
+		type_sort, err := cmd.Flags().GetString("sort")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-		result, error := searchDotfiles(args[0], page)
+		sorts := []string{"stars", "name"}
+
+		if type_sort != "" && !slices.Contains(sorts, type_sort) {
+			fmt.Println(color.RedString("Error:"), "Sort invalid")
+			return
+		}
+
+		repositories, error := SearchDotfiles(args[0], page)
+
+		if type_sort != "" {
+			switch type_sort {
+			case "name":
+				SortViaName(repositories)
+			case "stars":
+				SortViaStars(repositories)
+			default:
+				fmt.Println(color.RedString("Error:"), "Sort invalid")
+				return
+			}
+		}
 
 		if error != nil {
 			fmt.Println(error)
 			return
 		}
 
-		for _, repo := range result {
+		for _, repo := range repositories {
 			fmt.Println(color.RedString("Name:"), repo.FullName)
 			fmt.Println(color.BlueString("Url:"), repo.Html_url)
 			fmt.Println(color.GreenString("Description:"), repo.Description)

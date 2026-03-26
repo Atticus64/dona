@@ -10,6 +10,7 @@ import (
 
 var ShowVersion bool
 var page int
+var sort string
 
 var rootCmd = &cobra.Command{
 	Use:   "dona",
@@ -45,6 +46,7 @@ func configure() *cobra.Command {
 	rootCmd.PersistentFlags().BoolVarP(&ShowVersion, "version", "v", false, "Show Dona version")
 
 	actions.SearchCmd.PersistentFlags().IntVarP(&page, "page", "p", 1, "Number of page")
+	actions.SearchCmd.PersistentFlags().StringVarP(&sort, "sort", "s", "", "Sort Criteria: stars | name")
 	actions.PinCmd.PersistentFlags().StringVarP(&actions.Tag, "tag", "t", "", "Tag to save pin")
 	actions.GitCmd.DisableFlagParsing = true
 	rootCmd.AddCommand(util.VersionCmd, actions.SearchCmd, actions.GitCmd, actions.DelCmd)
