@@ -17,9 +17,9 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - name: Run tests suitcase
-        run: go test -v .
+        run: go test -v ./tests/
       - name: Test with Go
-        run: go test -v . -json > TestResults-${{ matrix.go-version }}.json
+        run: go test -v ./tests/ -json > TestResults-${{ matrix.go-version }}.json
       - name: Upload Go test results
         uses: actions/upload-artifact@v4
         with:
