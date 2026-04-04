@@ -45,6 +45,9 @@ func SearchDotfiles(query string, page int) ([]models.Repository, error) {
 	}
 
 	w.PersistWith(spin.Spinner{Frames: []string{"🐢"}}, " Nice!")
+	fmt.Println(color.YellowString("Found"), result.Total_count, "dotfiles repositories")
+	fmt.Println(color.MagentaString("Page"), page, "of", result.Total_count / 10 )
+	fmt.Println()
 
 	return result.Items, nil
 }
