@@ -7,7 +7,7 @@ import (
 )
 
 func GetVersion() string {
-	return "0.0.5"
+	return "0.0.6"
 }
 
 var VersionCmd = &cobra.Command{
