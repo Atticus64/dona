@@ -22,6 +22,8 @@ dona search neovim --sort stars
 dona search fedora --page 2
 ```
 
+![dona search demo](https://i.postimg.cc/D0TK5Dmk/image.png)
+
 ### Save & manage third party dotfiles
 ```bash
 dona save user/dotfiles    # Save dotfiles from a GitHub repo
